@@ -13,7 +13,7 @@ public class StackManager2 {
 	private static final int NUM_ACQREL = 4; // Number of Producer/Consumer threads
 	private static final int NUM_PROBERS = 1; // Number of threads dumping stack
 	private static int iThreadSteps = 3; // Number of steps they take
-	private static int productionCounter = 4;
+	private static int productionCounter = 2 * iThreadSteps;
 
 	private static StringBuilder stringBuilder = new StringBuilder();
 
