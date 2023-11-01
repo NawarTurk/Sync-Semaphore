@@ -1,25 +1,26 @@
 package charStackManagement;
 
+import charStackExceptions.SemaphoreNegativeValueException;
+
 //Source code for semaphore class:       
 
 public class Semaphore {
 	private int value;
-	private int counter = 0;
 
-	public Semaphore(int value) {
-		this.value = value;
+	public Semaphore(int value) throws SemaphoreNegativeValueException {
+		if (value < 0) {
+			throw new SemaphoreNegativeValueException();
+		} else {
+			this.value = value;
+		}
 	}
 
-	public Semaphore() {
+	public Semaphore() throws SemaphoreNegativeValueException {
 		this(0);
 	}
 
 	public synchronized void Wait() {
-//		this.value--; // __________________________________________++++
-		if (this.value < 0)
-			counter++;
-		while (this.value <= 0) // _______________make it < 0
-		{
+		while (this.value <= 0) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -28,7 +29,6 @@ public class Semaphore {
 			}
 		}
 		this.value--;
-		counter--;
 	}
 
 	public synchronized void Signal() {
@@ -44,10 +44,3 @@ public class Semaphore {
 		this.Signal();
 	}
 }
-
-//Task 1: Refer to the Semaphore class supplied and answer the following: according to the classical
-//definition of a semaphore, it can be initialized only to a non-negative value. If the value of a
-//semaphore becomes negative (via Wait() operation), then its absolute value indicates the number of
-//processes/threads on its wait queue. Does the given semaphore class implementation satisfy these
-//requirements? If not, modify the semaphore class implementation accordingly. Submit the modified
-//code.

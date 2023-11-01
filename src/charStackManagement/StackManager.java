@@ -6,6 +6,7 @@ import java.io.IOException;
 import charStackExceptions.CharStackEmptyException;
 import charStackExceptions.CharStackFullException;
 import charStackExceptions.CharStackInvalidAceessException;
+import charStackExceptions.SemaphoreNegativeValueException;
 
 public class StackManager {
 	private static CharStack stack = new CharStack();
@@ -15,11 +16,21 @@ public class StackManager {
 
 	private static StringBuilder stringBuilder = new StringBuilder();
 
-	private static Semaphore mutex = new Semaphore(1);
-	private static Semaphore full = new Semaphore(stack.getTop() + 1);
-	private static Semaphore empty = new Semaphore(stack.getSize() - (stack.getTop() + 1));
+	private static Semaphore mutex;
+	private static Semaphore full;
+	private static Semaphore empty;
 
 	public static void main(String[] argv) {
+		try {
+			mutex = new Semaphore(-1);
+			full = new Semaphore(stack.getTop() + 1);
+			empty = new Semaphore(stack.getSize() - (stack.getTop() + 1));
+		} catch (SemaphoreNegativeValueException e) {
+			final String ANSI_RED = "\u001B[31m";
+			System.out.println(ANSI_RED + "Error: " + e.getLocalizedMessage());
+			System.exit(1);
+		}
+
 		try {
 			System.out.println("Main thread starts executing.");
 			System.out.println("Initial value of top = " + stack.getTop() + ".");
