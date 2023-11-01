@@ -11,7 +11,7 @@ public class StackManager2 {
 	private static CharStack stack = new CharStack();
 	private static final int NUM_ACQREL = 4; // Number of Producer/Consumer threads
 	private static final int NUM_PROBERS = 1; // Number of threads dumping stack
-	private static int iThreadSteps = 100; // Number of steps they take
+	private static int iThreadSteps = 3; // Number of steps they take
 
 	private static StringBuilder stringBuilder = new StringBuilder();
 
@@ -106,6 +106,7 @@ public class StackManager2 {
 			stringBuilder.append("Consumer thread [TID=" + this.iTID + "] starts executing.\n");
 
 			for (int i = 0; i < StackManager2.iThreadSteps; i++) {
+				mutexExtra.P();
 				mutex.P();
 				try {
 					copy = stack.pop();
@@ -118,6 +119,7 @@ public class StackManager2 {
 				stringBuilder.append("Consumer thread [TID=" + this.iTID + "] pops character =" + this.copy + "\n");
 
 				mutex.V();
+				mutexExtra.V();
 			}
 			System.out.println("Consumer thread [TID=" + this.iTID + "] terminates.");
 
@@ -157,6 +159,9 @@ public class StackManager2 {
 
 				mutex.V();
 			}
+
+			mutexExtra.V();
+
 			System.out.println("Producer thread [TID=" + this.iTID + "] terminates.");
 
 			stringBuilder.append("Producer thread [TID=" + this.iTID + "] terminates.\n");
@@ -171,6 +176,7 @@ public class StackManager2 {
 			stringBuilder.append("CharStackProber thread [TID=" + this.iTID + "] starts executing.\n");
 
 			for (int i = 0; i < 2 * StackManager2.iThreadSteps; i++) {
+				mutexExtra.P();
 				mutex.P();
 				String stackString = "Stack S= (";
 				for (int j = 0; j < stack.getSize(); j++) {
@@ -195,6 +201,7 @@ public class StackManager2 {
 				stringBuilder.append(stackString + "\n");
 
 				mutex.V();
+				mutexExtra.V();
 			}
 		}
 	}
