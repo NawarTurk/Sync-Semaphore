@@ -1,4 +1,4 @@
-package ProgrammingAssignment2;
+package charStackManagement;
 
 class BaseThread extends Thread {
 	/*

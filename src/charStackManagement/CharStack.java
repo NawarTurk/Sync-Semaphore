@@ -1,11 +1,9 @@
-package ProgrammingAssignment2;
+package charStackManagement;
 
-//Source code for character stack:
-//Our own exceptions
-import CharStackExceptions.CharStackEmptyException;
-import CharStackExceptions.CharStackFullException;
-import CharStackExceptions.CharStackInvalidAceessException;
-import CharStackExceptions.CharStackInvalidSizeException;
+import charStackExceptions.CharStackEmptyException;
+import charStackExceptions.CharStackFullException;
+import charStackExceptions.CharStackInvalidAceessException;
+import charStackExceptions.CharStackInvalidSizeException;
 
 class CharStack {
 	/*
