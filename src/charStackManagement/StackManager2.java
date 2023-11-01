@@ -13,7 +13,7 @@ public class StackManager2 {
 	private static final int NUM_ACQREL = 4; // Number of Producer/Consumer threads
 	private static final int NUM_PROBERS = 1; // Number of threads dumping stack
 	private static int iThreadSteps = 3; // Number of steps they take
-	private static int producerCounter = 2;
+	private static int productionCounter = 4;
 
 	private static StringBuilder stringBuilder = new StringBuilder();
 
@@ -171,8 +171,8 @@ public class StackManager2 {
 
 				stringBuilder.append("Producer thread [TID=" + this.iTID + "] pushes character =" + this.block + "\n");
 
-				producerCounter--;
-				if (producerCounter == 0) {
+				productionCounter--;
+				if (productionCounter == 0) {
 					mutex_conumers_and_printer.V();
 				}
 				mutex_producers.V();
