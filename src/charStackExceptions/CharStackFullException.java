@@ -1,4 +1,4 @@
-package CharStackExceptions;
+package charStackExceptions;
 
 public class CharStackFullException extends Exception {
 	public CharStackFullException() {

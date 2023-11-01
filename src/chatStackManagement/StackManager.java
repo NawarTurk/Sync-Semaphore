@@ -1,11 +1,11 @@
-package ProgrammingAssignment2;
+package chatStackManagement;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
-import CharStackExceptions.CharStackEmptyException;
-import CharStackExceptions.CharStackFullException;
-import CharStackExceptions.CharStackInvalidAceessException;
+import charStackExceptions.CharStackEmptyException;
+import charStackExceptions.CharStackFullException;
+import charStackExceptions.CharStackInvalidAceessException;
 
 public class StackManager {
 	private static CharStack stack = new CharStack();

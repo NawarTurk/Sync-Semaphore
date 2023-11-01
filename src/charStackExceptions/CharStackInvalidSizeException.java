@@ -1,4 +1,4 @@
-package CharStackExceptions;
+package charStackExceptions;
 
 public class CharStackInvalidSizeException extends Exception {
 	public CharStackInvalidSizeException() {

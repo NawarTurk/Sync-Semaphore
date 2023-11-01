@@ -1,4 +1,4 @@
-package ProgrammingAssignment2;
+package chatStackManagement;
 
 class BaseThread extends Thread {
 	/*
