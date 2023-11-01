@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/charStackManagement/CharStack.java
 package charStackManagement;
-========
-package chatStackManagement;
->>>>>>>> 51944b7012ba84aaecff61740a136c9f6984b098:src/chatStackManagement/CharStack.java
 
 import charStackExceptions.CharStackEmptyException;
 import charStackExceptions.CharStackFullException;

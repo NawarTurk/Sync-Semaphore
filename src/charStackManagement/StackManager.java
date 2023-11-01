@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/charStackManagement/StackManager.java
 package charStackManagement;
-========
-package chatStackManagement;
->>>>>>>> 51944b7012ba84aaecff61740a136c9f6984b098:src/chatStackManagement/StackManager.java
 
 import java.io.FileWriter;
 import java.io.IOException;
