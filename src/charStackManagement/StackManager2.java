@@ -8,24 +8,24 @@ import charStackExceptions.CharStackFullException;
 import charStackExceptions.CharStackInvalidAceessException;
 import charStackExceptions.SemaphoreNegativeValueException;
 
-public class StackManager {
+public class StackManager2 {
 	private static CharStack stack = new CharStack();
 	private static final int NUM_ACQREL = 4; // Number of Producer/Consumer threads
 	private static final int NUM_PROBERS = 1; // Number of threads dumping stack
 	private static int iThreadSteps = 3; // Number of steps they take
+	private static int producerCounter = 2;
 
 	private static StringBuilder stringBuilder = new StringBuilder();
 
-	private static Semaphore mutex;
-	private static Semaphore full;
-	private static Semaphore empty;
+	private static Semaphore mutex_producers;
+	private static Semaphore mutex_conumers_and_printer;
 
 	public static void main(String[] argv) {
 		try {
-			mutex = new Semaphore(1);
-			full = new Semaphore(stack.getTop() + 1);
-			empty = new Semaphore(stack.getSize() - (stack.getTop() + 1));
+			mutex_producers = new Semaphore(1);
+			mutex_conumers_and_printer = new Semaphore(0);
 		} catch (SemaphoreNegativeValueException e) {
+			System.out.println(e.getLocalizedMessage());
 			final String ANSI_RED = "\u001B[31m";
 			System.out.println(ANSI_RED + "Error: " + e.getLocalizedMessage());
 			System.exit(1);
@@ -101,7 +101,7 @@ public class StackManager {
 
 		String outputString = stringBuilder.toString();
 
-		try (FileWriter fw = new FileWriter("Output_.txt")) {
+		try (FileWriter fw = new FileWriter("TaskManager2Output.txt")) {
 			fw.write(outputString);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -117,9 +117,10 @@ public class StackManager {
 
 			stringBuilder.append("Consumer thread [TID=" + this.iTID + "] starts executing.\n");
 
-			for (int i = 0; i < StackManager.iThreadSteps; i++) {
-				full.P();
-				mutex.P();
+			for (int i = 0; i < StackManager2.iThreadSteps; i++) {
+				mutex_conumers_and_printer.P();
+				mutex_producers.P();
+
 				try {
 					copy = stack.pop();
 				} catch (CharStackEmptyException e) {
@@ -130,8 +131,9 @@ public class StackManager {
 
 				stringBuilder.append("Consumer thread [TID=" + this.iTID + "] pops character =" + this.copy + "\n");
 
-				mutex.V();
-				empty.Signal();
+				mutex_producers.V();
+				mutex_conumers_and_printer.V();
+
 			}
 			System.out.println("Consumer thread [TID=" + this.iTID + "] terminates.");
 
@@ -147,9 +149,8 @@ public class StackManager {
 
 			stringBuilder.append("Producer thread [TID=" + this.iTID + "] starts executing.\n");
 
-			for (int i = 0; i < StackManager.iThreadSteps; i++) {
-				empty.P();
-				mutex.P();
+			for (int i = 0; i < StackManager2.iThreadSteps; i++) {
+				mutex_producers.P();
 				try {
 
 					if (stack.getTop() == -1) {
@@ -170,9 +171,13 @@ public class StackManager {
 
 				stringBuilder.append("Producer thread [TID=" + this.iTID + "] pushes character =" + this.block + "\n");
 
-				mutex.V();
-				full.V();
+				producerCounter--;
+				if (producerCounter == 0) {
+					mutex_conumers_and_printer.V();
+				}
+				mutex_producers.V();
 			}
+
 			System.out.println("Producer thread [TID=" + this.iTID + "] terminates.");
 
 			stringBuilder.append("Producer thread [TID=" + this.iTID + "] terminates.\n");
@@ -186,8 +191,9 @@ public class StackManager {
 
 			stringBuilder.append("CharStackProber thread [TID=" + this.iTID + "] starts executing.\n");
 
-			for (int i = 0; i < 2 * StackManager.iThreadSteps; i++) {
-				mutex.P();
+			for (int i = 0; i < 2 * StackManager2.iThreadSteps; i++) {
+				mutex_conumers_and_printer.P();
+				mutex_producers.P();
 				String stackString = "Stack S= (";
 				for (int j = 0; j < stack.getSize(); j++) {
 					stackString += "[";
@@ -209,8 +215,9 @@ public class StackManager {
 				System.out.println(stackString);
 
 				stringBuilder.append(stackString + "\n");
+				mutex_producers.V();
+				mutex_conumers_and_printer.V();
 
-				mutex.V();
 			}
 		}
 	}
