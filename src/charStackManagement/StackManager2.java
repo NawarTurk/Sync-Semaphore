@@ -57,7 +57,7 @@ public class StackManager2 {
 		Producer rb1 = new Producer();
 		Producer rb2 = new Producer();
 		System.out.println("Two Producer threads have been created.");
-
+//
 		stringBuilder.append("Two Producer threads have been created.\n");
 
 		CharStackProber csp = new CharStackProber();
@@ -79,7 +79,7 @@ public class StackManager2 {
 			rb1.join();
 			rb2.join();
 			csp.join();
-			// Some final stats after all the child threads terminated...
+//			 Some final stats after all the child threads terminated...
 			System.out.println("System terminates normally.");
 			System.out.println("Final value of top = " + stack.getTop() + ".");
 			System.out.println("Final value of stack top = " + stack.pick() + ".");

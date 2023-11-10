@@ -20,7 +20,9 @@ public class Semaphore {
 	}
 
 	public synchronized void Wait() {
-		while (this.value <= 0) {
+		this.value--;
+
+		if (this.value < 0) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -28,7 +30,6 @@ public class Semaphore {
 				e.printStackTrace();
 			}
 		}
-		this.value--;
 	}
 
 	public synchronized void Signal() {
